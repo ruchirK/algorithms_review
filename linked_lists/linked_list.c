@@ -92,6 +92,25 @@ int delete_head_single_linked_list(struct linked_list* list, void** result_ptr) 
 	return 0;
 }
 
+int delete_single_linked_list(struct linked_list* list, void** result_ptr) {
+	if (list == NULL){
+		fprintf(stderr, "ERROR: Linked list uninitialized\n");
+		return -1;
+	}
+	if (list->head == NULL){
+		fprintf(stderr, "ERROR: Linked list empty\n");
+		return -1;
+	}
+	struct node* new_head = list->head->next;
+	while(list->head){
+		delete_head_single_linked_list(list, NULL);
+	}
+	free(list);
+
+	return 0;
+}
+	
+
 int get_prev(struct linked_list* list, struct node* to_find, struct node** result_node) {
 	if (list == NULL){
 		fprintf(stderr, "ERROR: Linked list uninitialized\n");
@@ -263,7 +282,29 @@ void print_int_single_linked_list(struct linked_list* list){
 	}
 	printf("\n");
 } 	 			
+int reverse_single_linked_list(struct linked_list* list) {
+	if (!list || !(list->head) ) {
+		return -1;
+	}
+	struct node* curr = list->head;
+	struct node* next;
+	struct node* prev = NULL; 
+	while(curr) {
+		next = curr->next; 
+		curr->next = prev;
+		prev = curr;
+		curr = next;
+	}
 
+	if (!list->head || !list->tail || !list->tail->next) {
+		return -1;
+	}
+	//swap head and tail
+	curr = list->head;
+	list->head = list->tail;
+	list->tail = curr;
+	return 0;
+}	
 
 int main(int argc, char** argv) {
 	struct linked_list* list = init_single_linked_list();
@@ -271,8 +312,13 @@ int main(int argc, char** argv) {
 	int second = 4;
 	insert_head_single_linked_list(list, (void*) &first);
 	insert_tail_single_linked_list(list, (void*) &second);
-	insert_head_single_linked_list(list, (void*) &second);
-	delete_tail_single_linked_list(list, (void**) NULL);
+	insert_head_single_linked_list(list, (void*) &first);
 	print_int_single_linked_list(list);
-}
+//	delete_tail_single_linked_list(list, (void**) NULL);
+	reverse_single_linked_list(list);
+	print_int_single_linked_list(list);
+	delete_single_linked_list(list, NULL);
 
+	return 0;
+
+}
