@@ -70,7 +70,87 @@ int insert_tail_single_linked_list(struct linked_list* list, void* value){
 	list->tail = new_node;	
 }
 
+int delete_head_single_linked_list(struct linked_list* list, void** result_ptr) {
+	if (list == NULL){
+		fprintf(stderr, "ERROR: Linked list uninitialized\n");
+		return -1;
+	}
+	if (list->head == NULL){
+		fprintf(stderr, "ERROR: Linked list empty\n");
+		return -1;
+	}
+	struct node* new_head = list->head->next;
+	struct node* old = list->head;
+	if (result_ptr) {
+		*result_ptr = list->head->data;
+	}
+	if(list->head == list->tail){
+		list->tail = new_head;
+	}
+	list->head = new_head;
+	free(old);
+	return 0;
+}
 
+int get_prev(struct linked_list* list, struct node* to_find, struct node** result_node) {
+	if (list == NULL){
+		fprintf(stderr, "ERROR: Linked list uninitialized\n");
+		return -1;
+	}
+	if (list->head  == NULL){
+		fprintf(stderr, "ERROR: Linked list empty\n");
+		return -1;
+	}
+	if (result_node == NULL) {
+		fprintf(stderr, "ERROR: Pointer to store result in is uninitialized\n");
+		return -1;
+	}
+	if(to_find == NULL) {
+		fprintf(stderr, "ERROR: Please enter a valid node to search for\n");
+		return -1;
+	}
+	if (to_find == list->head){
+		*result_node = (struct node *) NULL;
+		return 0;
+	}
+	struct node* node = list->head;
+	while (node){
+		if(to_find == node->next) {
+			*result_node = node;
+			return 0;
+		}
+		node = node->next;
+	}
+	return -1;
+}  
+
+int delete_tail_single_linked_list(struct linked_list* list, void** result_ptr) {
+	if (list == NULL){
+		fprintf(stderr, "ERROR: Linked list uninitialized\n");
+		*result_ptr = NULL;
+		return -1;
+	}
+	if (list->tail == NULL){
+		fprintf(stderr, "ERROR: Linked list empty\n");
+		*result_ptr = NULL;
+		return -1;
+	}
+	struct node* new_tail;
+	struct node* old = list->tail;
+	if (get_prev(list, list->tail, &new_tail) < 0) {
+		return -1;
+	}
+	if (result_ptr) {
+		*result_ptr = list->tail->data;
+	}
+	if(list->head == list->tail){
+		list->head = new_tail;
+	}
+	new_tail->next = NULL;
+	list->tail = new_tail;
+	free(old);
+	return 0;
+}
 int insert_after_node_single_linked_list(struct linked_list* list, struct node* node, void* value){
 	if (node == NULL){
 		fprintf(stderr, "ERROR: Node uninitialized\n");
@@ -95,6 +175,32 @@ int insert_after_node_single_linked_list(struct linked_list* list, struct node* 
 	return 0;
 }
 
+int delete_node_single_linked_list(struct linked_list* list, struct node* node, void** result_ptr){
+	if (node == NULL){
+		fprintf(stderr, "ERROR: Node uninitialized\n");
+		return -1;
+	}
+	if(node->next == NULL && list->tail != node) {
+		return -1;
+	}
+	if (node == list->head){
+		return delete_head_single_linked_list(list, result_ptr);
+	}
+	if (node->next == NULL && list->tail == node) {
+		//fprintf(stderr, "ERROR: Do not use this to update the list tail");
+		return delete_tail_single_linked_list(list, result_ptr);
+	}
+	struct node* temp = node->next;
+	if(result_ptr) {
+		*result_ptr = node->data;
+	}
+	node->data = node->next->data;
+	node->next = node->next->next;
+	free(temp);
+	return 0;
+}
+	
+	
 int take_step_single_linked_list(struct node* node, int step_size){
 	if (node == NULL){
 		return -1;
@@ -166,6 +272,7 @@ int main(int argc, char** argv) {
 	insert_head_single_linked_list(list, (void*) &first);
 	insert_tail_single_linked_list(list, (void*) &second);
 	insert_head_single_linked_list(list, (void*) &second);
+	delete_tail_single_linked_list(list, (void**) NULL);
 	print_int_single_linked_list(list);
 }
 
