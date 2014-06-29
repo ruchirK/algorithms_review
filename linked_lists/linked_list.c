@@ -8,6 +8,7 @@ struct node {
 
 struct linked_list {
 	struct node* head;
+	struct node* tail;
 };
 
 struct linked_list* init_single_linked_list(){
@@ -16,6 +17,7 @@ struct linked_list* init_single_linked_list(){
 		return (struct linked_list*)  NULL;
 	}
 	list->head = NULL;
+	list->tail = NULL;
 	return list;
 }
 	
@@ -42,14 +44,46 @@ int insert_head_single_linked_list(struct linked_list* list, void* value){
 	}
 	new_node->next = list->head;
 	list->head = new_node;
+	if(list->tail == NULL) {
+		list->tail = new_node;
+	}
 	return 0;
 }
 
-int insert_after_node_single_linked_list(struct node* node, void* value){
+int insert_tail_single_linked_list(struct linked_list* list, void* value){
+	if (list == NULL) {
+		return -1;
+	}
+	if (list->head == NULL && list->tail == NULL) {
+		return insert_head_single_linked_list(list,  value);
+	}
+	if(list->tail == NULL) {
+		return -1;
+	}
+	struct node* new_node;
+	new_node = make_single_linked_node(value);
+	if (new_node == NULL) {
+		return -1;
+	}
+	struct node* prev_tail = list->tail;
+	prev_tail->next = new_node;
+	list->tail = new_node;	
+}
+
+
+int insert_after_node_single_linked_list(struct linked_list* list, struct node* node, void* value){
 	if (node == NULL){
 		fprintf(stderr, "ERROR: Node uninitialized\n");
 		return -1;
 	}
+	if(node->next == NULL && list->tail != node) {
+		return -1;
+	}
+	if (node->next == NULL && list->tail == node) {
+		//fprintf(stderr, "ERROR: Do not use this to update the list tail");
+		return insert_tail_single_linked_list(list,value);
+	}
+	
 	struct node* new_node;
 	new_node = make_single_linked_node(value);
 	if (new_node == NULL) {
@@ -90,32 +124,6 @@ struct node* goto_index_single_linked_list(struct linked_list* list, int index) 
 	}
 	return node;
 }
-
-struct node* goto_tail_single_linked_list(struct linked_list* list){
-	if (list == NULL || list->head == NULL) {
-		return (struct node*) NULL;
-	}
-	struct node* node = list->head;
-	while(node->next) {
-		node = node->next;
-	}
-	return node;
-}
-	
-int insert_tail_single_linked_list(struct linked_list* list, void* value){
-	if (list == NULL) {
-		return -1;
-	}
-	if (list->head == NULL) {
-		return insert_head_single_linked_list(list,  value);
-	}
-	struct node* prev_tail = goto_tail_single_linked_list(list);
-	if(prev_tail == NULL) {
-		return -1;
-	}
-	insert_after_node_single_linked_list(prev_tail, value);
-}
-
 int insert_index(struct linked_list* list, void* value, int index){
  	if (list == NULL || list->head == NULL) {
 		return -1;
@@ -124,8 +132,10 @@ int insert_index(struct linked_list* list, void* value, int index){
 	if(node == NULL){
 		return -1;
 	}
-	return insert_after_node_single_linked_list(node, value);
+	return insert_after_node_single_linked_list(list, node, value);
 }
+
+
 
 void print_int_single_linked_list(struct linked_list* list){
 	if (list == NULL || list->head == NULL) {
@@ -138,7 +148,7 @@ void print_int_single_linked_list(struct linked_list* list){
 	while(node) {
 		if(node->data){
 			ptr = (int*) node->data;
-			printf("%d ",*ptr);
+			printf("%d",*ptr);
 		}
 		if(node->next){
 			printf(" -> ");
@@ -148,12 +158,14 @@ void print_int_single_linked_list(struct linked_list* list){
 	printf("\n");
 } 	 			
 
+
 int main(int argc, char** argv) {
 	struct linked_list* list = init_single_linked_list();
 	int first = 7;
 	int second = 4;
 	insert_head_single_linked_list(list, (void*) &first);
 	insert_tail_single_linked_list(list, (void*) &second);
+	insert_head_single_linked_list(list, (void*) &second);
 	print_int_single_linked_list(list);
 }
 
