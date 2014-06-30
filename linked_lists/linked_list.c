@@ -6,6 +6,51 @@ struct node {
 	struct node* next;
 };
 
+struct dl_node {
+	void* data;
+	struct dl_node* next;
+	struct dl_node* prev;
+};
+
+struct dl_list {
+	struct dl_node* head;
+	struct dl_node* tail;
+};
+
+struct dl_list* init_dl_list() {
+	return calloc(1, sizeof(struct dl_list));
+}
+struct dl_node* make_dl_node(void* value) {
+	struct dl_node* new_node = (struct dl_node* ) malloc(sizeof (struct dl_node));
+	if (new_node == NULL){
+		//perror("");
+		return (struct dl_node *) NULL;
+	}
+	new_node->data = value;
+	new_node->next = NULL;
+	new_node->prev = NULL;
+	return new_node;
+}
+	
+int insert_head_dl_list(struct dl_list* list, void* value){
+	if (list == NULL){
+		fprintf(stderr, "ERROR: Linked list uninitialized\n");
+		return -1;
+	}
+	struct dl_node* new_node;
+	new_node = make_dl_node(value);
+	if (new_node == NULL) {
+		return -1;
+	}
+	new_node->next = list->head;
+	list->head = new_node;
+	if(list->tail == NULL) {
+		list->tail = new_node;
+	}
+	return 0;
+}
+
+
 struct linked_list {
 	struct node* head;
 	struct node* tail;
