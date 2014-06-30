@@ -4,7 +4,6 @@
 
 //Code to reverse a string in place   
 
-//Test driver 
 int my_atoi(char* input ) {
 	if (input == NULL) {
 		return -1;
@@ -28,13 +27,9 @@ int main(int argc, char** argv) {
 	//Remember that char* and char[] are two different initializations and
 	//the first is immutable
 	char string_one[] = "he6438ffffe4567";
-	char string_two[] = "goodbye";
 	printf("Originals: %s %s\n", string_one, string_two);
-//	reverse(string_one);	
-//
-//	reverse(string_two);
-	int number = my_atoi(string_one);
-	printf("Reversed: %s %d\n", string_one, number);
+	int number = my_atoi(string_one);	
+	printf("Converted number: %s %d\n", string_one, number);
 
 	return 0;
 
