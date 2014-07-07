@@ -7,7 +7,8 @@
 //First implementation does so with a true bitvector 
 //Assumes that input string contains only lowercase ascii encoded letters
 //Takes O(n) where n is size of input string 
-//If there are no other data structures allowed, then it takes O(n^2) to look ahead in string for each letter 
+//If there are no other data structures allowed, then it takes O(n^2) to look ahead in string for each letter
+//Returns 0 if indeed the string is composed of all unique characters  
 int all_unique_bitvector(char* input) {
 	unsigned int bitvector = 0;
 	int i; 	//index

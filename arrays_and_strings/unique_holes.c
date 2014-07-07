@@ -2,6 +2,18 @@
 #include <stdlib.h>
 #include <string.h>
 
+/* Code that, when given a 2D array of zeroes and ones, checks for the 
+ * 'islands of 0s' or groups of adjacent 0s. 0s must be horizontally 
+ * or vertically directly next to each other in order to be adjacent
+ * Diagonals don't count here 
+ * Algorithm - parses array going first left-right, then top down
+ * Each element checks above and to its left to see if there are any neighboring 
+ * elements with a value > 1. Otherwise, if it is 0, and there is a neighbor like that
+ * its value gets copied over, otherwise it gets overwritten by current # of sets seen + 2
+ * Note that while this overwrites the array, it doen't actually destroy it 
+ * Since checking each element takes constant time + constant time overwrites 
+ * on a n by n array it takes O(n^2) and computes the result with no extra space 
+ */ 
 
 char check_point (char** array, int x, int y, int m, int n) {
     if (x < 0 || x >= m || y < 0 || y >= n) {

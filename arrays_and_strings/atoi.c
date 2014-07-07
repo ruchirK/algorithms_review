@@ -3,7 +3,9 @@
 #include <string.h>
 
 //Code to reverse a string in place   
-
+//This assumes base 10 conversion, but can be generalized to any base
+//Currently converts first continuous substring of valid characters into an int 
+//Ignores decimal points, signs and everything else
 int my_atoi(char* input ) {
 	if (input == NULL) {
 		return -1;

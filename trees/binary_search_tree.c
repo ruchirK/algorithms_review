@@ -165,7 +165,26 @@ int swap_nodes (struct b_node* a, struct b_node* b) {
 	struct b_node* temp = a->parent;
 	a->parent = b->parent;
 	b->parent = temp;
-}	
+}
+
+/* find-min finds the minimum element in the binary search tree by 
+ * going to the leftmost descendant 
+ * Takes O(h) time same worst and best case 
+ * Returns pointer to node containing minimum value or NULL on error
+ */
+struct b_node* find_min(struct b_node* root) {
+	if (root == NULL) {
+	//Uninitialized pointer - error condition
+		return NULL;
+	}
+	struct b_node* curr_min = root;
+	while(curr_min->left) {
+		curr_min = curr_min->left;
+	}
+	return curr_min;
+}
+  
+ 	
 /* Deletes a node from a binary search tree 
  * Three cases to consider - node has 0,i 1, or two kids 
  * First two are trivial and can be done in constant time 
