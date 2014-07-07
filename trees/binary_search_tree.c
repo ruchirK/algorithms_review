@@ -183,6 +183,22 @@ struct b_node* find_min(struct b_node* root) {
 	}
 	return curr_min;
 }
+ /* find-max finds the maximum element in the binary search tree by 
+ * going to the rightmost descendant 
+ * Takes O(h) time same worst and best case 
+ * Returns pointer to node containing minimum value or NULL on error
+ */
+struct b_node* find_max(struct b_node* root) {
+	if (root == NULL) {
+	//Uninitialized pointer - error condition
+		return NULL;
+	}
+	struct b_node* curr_max = root;
+	while(curr_max->right) {
+		curr_max = curr_max->right;
+	}
+	return curr_max;
+}
   
  	
 /* Deletes a node from a binary search tree 
@@ -244,3 +260,8 @@ int delete_node_bst(struct b_node* to_delete) {
 	//position in the tree 
 
 }
+
+/* Traversals 
+ * Many common tree traversals/seaches exist 
+ * The standard binary search tree search is a DFS that takes advantage of 
+ * node orderings to reduce search s      
