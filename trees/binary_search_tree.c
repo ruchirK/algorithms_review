@@ -264,4 +264,45 @@ int delete_node_bst(struct b_node* to_delete) {
 /* Traversals 
  * Many common tree traversals/seaches exist 
  * The standard binary search tree search is a DFS that takes advantage of 
- * node orderings to reduce search s      
+ * node orderings to reduce search space 
+ * Alternatively there are 3 types of DF traversals
+ * Preorder: Root Left Right 
+ * Inorder: Left Root Right  
+ * Postorder: Left Right Root 
+ * Note that all three preserve the relative ordering of left/right children 
+ * All three can be done recursively (call stack) or iteratively using a stack
+ * Alternatively you can have a BF (level order) traversal using a queue
+ * Since trees are guaranteed to be acyclic - don't need to keep track of seen
+ * Complexity O(n)
+ */
+
+/* Note that these traversals can do anything, not just print 
+ */
+
+void preorder(struct b_node* root) {
+	if (root == NULL) {
+		return;
+	}
+	printf("%d\n", root->value);
+	preorder(root->left);
+	preorder(root->right);
+}
+
+void inorder(struct b_node* root) {
+	if (root == NULL) {
+		return;
+	}
+	inorder(root->left);
+	printf("%d\n", root->value);
+	inorder(root->right);
+}
+
+void postorder(struct b_node* root) {
+	if (root == NULL) {
+		return;
+	}
+	postorder(root->left);
+	postorder(root->right);
+
+	printf("%d\n", root->value);
+}     
