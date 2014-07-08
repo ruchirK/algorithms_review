@@ -116,7 +116,7 @@ struct node* merge(struct node* start_a, struct node* start_b) {
 			//advance curr
 			temp = curr;
 			curr = curr->next;
-			prev = curr; 
+			prev = temp; 
 		}
 	}
 	if (comp == NULL && curr) {
@@ -150,7 +150,30 @@ struct node* mergesort_sll(struct node* start, struct node* end) {
 		return NULL;
 	}
 	struct node* after_median = median->next;
+	median->next = NULL;
+	end->next = NULL;
 	struct node* a = mergesort_sll(start, median);
 	struct node* b = mergesort_sll(after_median, end);
 	return merge(a,b);
+}
+
+int main(int argc, char** argv) {
+	struct node* node = init_node(9);
+	struct node *root = insert_front(node, 2);
+	root = insert_front(root,3);
+	root = insert_front(root, 4);
+	root = insert_front(root, 5);
+
+	//struct node* root2 = init_node(7);
+//	root2 = insert_front(root2, 6);
+	root = mergesort_sll(root, node);
+	struct node* curr = root;
+	while(curr) {
+		printf("%d\n", curr->value);
+		curr = curr->next;
+	}
+	struct node* median = get_median(root);
+	printf("\n\n%d\n", median->value);
+	
+	
 }  	 
