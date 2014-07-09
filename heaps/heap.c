@@ -66,7 +66,7 @@ int get_max(struct heap* heap) {
  */ 
 
 int insert_min_heap(struct heap* heap, int data) {
-	if (heap == NULL || heap->array == NULL || heap->capacity == NULL || heap->curr_size > heap->capacity) {
+	if (heap == NULL || heap->array == NULL || heap->capacity == 0 || heap->curr_size > heap->capacity) {
 		return -1; 
 	}
 	heap->array[heap->curr_size] = data;
@@ -86,7 +86,7 @@ int insert_min_heap(struct heap* heap, int data) {
 
 }
 int insert_max_heap(struct heap* heap, int data) {
-	if (heap == NULL || heap->array == NULL || heap->capacity == NULL || heap->curr_size > heap->capacity) {
+	if (heap == NULL || heap->array == NULL || heap->capacity == 0 || heap->curr_size > heap->capacity) {
 		return -1; 
 	}
 	heap->array[heap->curr_size] = data;
@@ -105,5 +105,50 @@ int insert_max_heap(struct heap* heap, int data) {
 	return 0; 
 
 }
+/* delete-min and delete-max deletes the root of a min/max heap 
+ * Does so by swapping the root with last inserted element and then 
+ * 'bubbling down' to its correct position 
+ * Complexity O(log n)
+ * Returns minimum value or -1 on error  
+ */ 
 
 
+int delete_min(struct heap* heap) {
+	if(heap == NULL || heap->array == NULL || heap->curr_size <= 1) {
+		return -1; 
+	}
+	int min  = heap->array[1];  
+	heap->array[1] = heap->array[(heap->curr_size) - 1]; 
+	heap->array[(heap->curr_size) - 1] = 0;
+	heap->curr_size--; 
+	
+	int parent =1; 
+	int child_1 = parent*2; 
+	int child_2 = child_1 + 1; 
+	int temp; 
+	while (child_1 > heap->curr_size && child_2 > heap->curr_size) {
+		if(heap->array[parent] > heap->array[child_1]) {
+		//Swap them 
+			int temp = heap->array[parent];
+			heap->array[parent] = heap->array[child_1];
+			heap->array[child_1] = temp;
+			parent = child_1;
+			child_1 = parent * 2;
+			child_2 = child_1 +1; 
+		}
+		else if (heap->array[parent] > heap->array[child_2]) {
+		//Swap them 
+			int temp = heap->array[parent];
+			heap->array[parent] = heap->array[child_2];
+			heap->array[child_2] = temp;
+			parent = child_2;
+			child_1 = parent * 2;
+			child_2 = child_1 +1; 
+		}
+		else {
+			break;
+		}
+	}
+	return min; 
+}
+  
