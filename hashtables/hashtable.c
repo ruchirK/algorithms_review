@@ -83,8 +83,25 @@ int insert_at_index(struct hashtable* htable, int index, int val) {
 	*save_ptr = new_node;
 	return 0;
 } 
-		
+/* searches a hashtable at in index given by the hash function
+ * takes 0(1) amortized time 
+ * obviously performance suffers if there are a lot of hash collisions
+ * returns pointer to hash node containing val or NULL
+ */		
+struct hash_node* search_at_index(struct hashtable* htable, int index, int val) {
+	if(htable == NULL || htable->array == NULL || index >= htable->size || htable->array[index] == NULL) {
+		return NULL;
+	}
+	struct hash_node* node = htable->array[index]; 
+	while(node) {
+		if(node->value == val) {
+			return node; 
+		}
+		node = node->next;
+	}
+	return NULL;
 
+}
 
 
 
