@@ -104,4 +104,6 @@ struct hash_node* search_at_index(struct hashtable* htable, int index, int val) 
 }
 
 
+int delete_at_index(struct hashtable* htable, int index, int val) {
+
 
