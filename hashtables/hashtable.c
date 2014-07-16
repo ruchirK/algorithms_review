@@ -105,5 +105,27 @@ struct hash_node* search_at_index(struct hashtable* htable, int index, int val) 
 
 
 int delete_at_index(struct hashtable* htable, int index, int val) {
+	if(htable == NULL || htable->array == NULL || index >= htable->size || htable->array[index] == NULL) {
+		return -1;
+	}
+	struct hash_node* node = htable->array[index];
+	struct hash_node* prev_node = NULL;
+	struct hash_node* next_node = NULL;
+	while(node) {
+		if(node->value == val) {
+			next_node = node->next;
+			int ret = node->value;
+			free(node);
+			if (prev_node) {
+				prev_node->next = next_node;
+			}
+			return ret;
+			
+		}
+		prev_node = node;
+		node = node->next;
+	}
+	return -1;
 
+}
 
